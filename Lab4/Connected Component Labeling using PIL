@@ -1,0 +1,45 @@
+import PIL
+from PIL import Image
+import matplotlib.pyplot as plt
+import numpy as np
+
+fname = "gray.png"
+try:
+    im = Image.open(fname)
+except IOError:
+    print("Cannot open image")
+
+label = 0
+v = 0
+width, height = im.size
+ldict = {}
+ldict2 = {}
+ldict3 = {}
+print(width,height)
+for y in range(0,height-1):
+    for x in range(0,width-1):
+        if (im.getpixel((x,y)) != 0):
+            pass
+        elif ((x-1,y) in ldict and (x,y-1) not in ldict):
+            ldict[x,y] = ldict[x-1,y]
+        elif ((x,y-1) in ldict and (x-1,y) not in ldict):
+            ldict[x,y] = ldict[x,y-1]
+        elif ((x,y-1) in ldict and (x-1,y) in ldict):
+            lmin = min(ldict[x-1,y],ldict[x,y-1])
+            lmax = max(ldict[x-1,y],ldict[x,y-1])
+            if(lmax not in ldict2):
+                ldict2[lmax]=lmin
+        else:
+            label = label+1
+            ldict[x,y] = label
+
+for coordinates, label in ldict.items():
+    if label in ldict2:
+        ldict[coordinates] = ldict2[label]
+
+labels = np.zeros((height,width),np.int32)
+for coordinates, label in ldict.items():
+    labels[coordinates[1],coordinates[0]] = label
+    
+plt.imshow(labels, cmap="nipy_spectral")
+plt.show()
