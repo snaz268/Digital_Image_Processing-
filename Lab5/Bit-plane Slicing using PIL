@@ -1,0 +1,31 @@
+#Bit-plane Slicing
+import PIL
+from PIL import Image
+
+def Bit_Plane_Slicer(pic_name, b_plane):
+    fname = pic_name
+    try:
+        im = Image.open(fname).convert('L')
+    except IOError:
+        print("Cannot open image")
+        
+    width, height = im.size
+    im2 = Image.new('L', im.size)
+    bit_plane = b_plane
+    
+    for x in range(0, width-1):
+        for y in range(1, height-1):
+            b = bin(im.getpixel((x,y)))[2:].zfill(8)
+            n = int(b[7-bit_plane])*255
+            im2.putpixel((x,y), (n))
+    im2.show()
+    return;
+
+Bit_Plane_Slicer("dollar.tif", 0)
+Bit_Plane_Slicer("dollar.tif", 1)
+Bit_Plane_Slicer("dollar.tif", 2)
+Bit_Plane_Slicer("dollar.tif", 3)
+Bit_Plane_Slicer("dollar.tif", 4)
+Bit_Plane_Slicer("dollar.tif", 5)
+Bit_Plane_Slicer("dollar.tif", 6)
+Bit_Plane_Slicer("dollar.tif", 7)
