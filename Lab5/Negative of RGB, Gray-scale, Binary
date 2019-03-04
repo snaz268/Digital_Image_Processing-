@@ -1,0 +1,19 @@
+#Negative of RGB, Gray-scale, Binary
+import PIL
+from PIL import Image
+fname = "lena.jpg"
+try:
+    im = Image.open(fname)
+except IOError:
+    print("Cannot open image")
+width, height = im.size
+L=255
+
+for x in range(0, width-1):
+    for y in range(0, height-1):
+        pixel = im.getpixel((x,y))
+        if type(pixel) is not tuple:
+            pixel = (pixel,)
+        l = tuple(L-i for i in pixel)
+        im.putpixel((x, y), l)
+im.show()
