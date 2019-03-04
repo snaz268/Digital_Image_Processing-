@@ -1,0 +1,10 @@
+import PIL
+from PIL import Image
+fname = "Lab4-image.png"
+try:
+    im = Image.open(fname)
+except IOError:
+    print("Cannot open image")
+im2 = im.convert('L').point((lambda x : 255 if x> 90 else 0), mode = '1')
+im2.save("gray.png")
+im2.show()
