@@ -1,0 +1,12 @@
+#Drawing histogram
+from PIL import Image
+import matplotlib.pyplot as plt
+fname = "B3.jpg"
+try:
+    im = Image.open(fname).convert("L")
+except IOError:
+    print("Cannot open image")
+
+pix_val = list(im.getdata())
+plt.hist(pix_val, normed =True, bins = 255)
+plt.show()
